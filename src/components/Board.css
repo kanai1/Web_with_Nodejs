@@ -1,0 +1,15 @@
+.outer{display: 'flex'; width:'100%'; height:'100vh'}
+
+.board_table{margin: 0 auto;}
+.post_num{width: 70px;}
+.post_title{width: 500px;}
+.user_name{width: 120px;}
+.post_time{width: 100px;}
+th, td{
+	border-bottom: 1px solid #444444;
+	align-content: center;
+}
+div > a{
+	text-decoration: none;
+	color: black;
+}
