@@ -1,9 +1,8 @@
-const connection = require('./DB');
-
+const connection = require('../lib/DB');
+const dbQuery = require('../lib/DB-query')
 let board = {
 	list: function(req, res, next) {
-		const sql = "SELECT post_num, title, writer_name, date_format(post_time, '%Y-%m-%d %H:%i') as post_time FROM board";
-		connection.query(sql, (err, rows) => {
+		connection.query(dbQuery.getBoard, (err, rows) => {
 			if(err) next(err);
 			else {
 				console.log(rows);
@@ -14,8 +13,7 @@ let board = {
 	},
 	
 	get: function(req, res, next) {
-		const sql = "SELECT * FROM board WHERE post_num = ?";
-		connection.query(sql, [req.params.num], (err, rows) => {
+		connection.query(dbQuery.getPost, [req.params.num], (err, rows) => {
 			if(err) return next(err);
 			else{
 				if(req.jwt.isLogin && req.jwt.id == rows[0].id) rows[0].isMine = true;
@@ -36,11 +34,10 @@ let board = {
 			const body = req.body.body;
 			const writer_id = req.jwt.id;
 			const writer_name = req.jwt.name;
-
-			const sql = "INSERT INTO board(title, body, writer_id, writer_name) VALUES(?,?,?,?);";
+			
 			const values = [title, body, writer_id, writer_name];
 
-			connection.query(sql, values, (err, log) => {
+			connection.query(dbQuery.insertPost, values, (err, log) => {
 				if(err) return next(err);
 				else {
 					res.send({result: true, post_num: log.insertId})
