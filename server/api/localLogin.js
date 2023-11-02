@@ -1,13 +1,12 @@
-const connection = require('./DB');
+const connection = require('../lib/DB');
+const dbQuery = require('../lib/DB-query')
 const jwt_utils = require('./jwt_utils');
 
 function idDoubleCheck(id) {
-	var sql = 'SELECT COUNT(*) FROM login_test WHERE id = ?';
 	var values = [id];
-
 	var result = true;
 
-	connection.query(sql, values, (error, rows) => {
+	connection.query(dbQuery.getUseridCount, values, (error, rows) => {
 		if(error) throw error;
 		if(rows[0]['COUNT(*)'] == 0) result = true;
 		else result = false;
@@ -19,16 +18,14 @@ function idDoubleCheck(id) {
 let Login = {
 
 	login: function (req, res, next) {
-		console.log('Middleware: login')
 		const sendData = {isLogin: ""};
 
 		var id = req.body.id;
 		var password = req.body.password;
 
-		var sql = 'SELECT * FROM login_test WHERE id = ? AND password = ?';
 		var values = [id, password];
 
-		connection.query(sql, values, (error, rows) => {
+		connection.query(dbQuery.loginCheck, values, (error, rows) => {
 			if (error) throw error;
 			console.log('User info is: ', rows);
 			if(rows.length > 0)
@@ -54,15 +51,11 @@ let Login = {
 		var id = req.body.id;
 		var password = req.body.password;
 		var username = req.body.username;
-
-		var sql = 'INSERT INTO login_test(id, password, name) values (?, ?, ?)';
+		
 		var values = [id, password, username];
 
 		if(idDoubleCheck(id)) {
-			connection.query(sql, values, (error, log) => {
-				console.log(log);
-				console.log(sql);
-				console.log(values);
+			connection.query(dbQuery.register, values, (error, log) => {
 				if(error) {
 					console.log(error);
 					throw error;

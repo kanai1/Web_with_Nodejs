@@ -1,0 +1,6 @@
+exports.getBoard = "SELECT post_num, title, writer_name, date_format(post_time, '%Y-%m-%d %H:%i') as post_time FROM board"
+exports.getPost = "SELECT * FROM board WHERE post_num = ?"
+exports.insertPost = "INSERT INTO board(title, body, writer_id, writer_name) VALUES(?,?,?,?);"
+exports.getUseridCount = "SELECT COUNT(*) FROM login_test WHERE id = ?"
+exports.loginCheck = "SELECT * FROM login_test WHERE id = ? AND password = ?"
+exports.register = "INSERT INTO login_test(id, password, name) values (?, ?, ?"
