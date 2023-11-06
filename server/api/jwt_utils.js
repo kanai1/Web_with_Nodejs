@@ -9,8 +9,8 @@ let jwt_utils = {
 			process.env.JWT_SECRET_CODE,
 			{
 			algorithm : "HS256", // 해싱 알고리즘
-			expiresIn : "5m",  // 토큰 유효 기간
-			issuer : "issuer" // 발행자
+			expiresIn : "2h",  // 토큰 유효 기간
+			issuer : "kanai1" // 발행자
 		});
 	},
 
@@ -22,7 +22,7 @@ let jwt_utils = {
 			{
 			algorithm : "HS256", // 해싱 알고리즘
 			expiresIn : "7 days",  // 토큰 유효 기간
-			issuer : "issuer" // 발행자
+			issuer : "kanai1" // 발행자
 		});
 	},
 

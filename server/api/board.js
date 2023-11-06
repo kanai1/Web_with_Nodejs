@@ -1,31 +1,31 @@
 const connection = require('../lib/DB');
 const dbQuery = require('../lib/DB-query')
 let board = {
-	list: function(req, res, next) {
-		connection.query(dbQuery.getBoard, (err, rows) => {
-			if(err) next(err);
-			else {
-				console.log(rows);
-				res.send(rows);
-				next('route');
-			}
-		})
+	list: async function(req, res, next) {
+		try{
+			const [rows] = await connection.execute(dbQuery.getBoard)
+			console.log(rows)
+			res.send(rows)
+			next('route')
+		} catch (err) {
+			next(err)
+		}
 	},
 	
-	get: function(req, res, next) {
-		connection.query(dbQuery.getPost, [req.params.num], (err, rows) => {
-			if(err) return next(err);
-			else{
-				if(req.jwt.isLogin && req.jwt.id == rows[0].id) rows[0].isMine = true;
-				else rows[0].isMine = false;
-				console.log(rows[0]);
-				res.send(rows[0]);
-				next();
-			}
-		});
+	get: async function(req, res, next) {
+		try{
+			const [rows] = await connection.execute(dbQuery.getPost, [req.params.num])
+			if(req.jwt.isLogin && req.jwt.id == rows[0].id) rows[0].isMine = true
+			else rows[0].isMine = false
+			console.log(rows[0])
+			res.send(rows[0])
+			next()
+		} catch(err) {
+			next(err)
+		}
 	},
 
-	post: function(req, res, next) {
+	post: async function(req, res, next) { /*not Tested: Have to make FrontPage*/
 		if(req.jwt.isLogin == false) {
 			res.send({result: false, message: "Login Require"});
 		}
@@ -37,12 +37,13 @@ let board = {
 			
 			const values = [title, body, writer_id, writer_name];
 
-			connection.query(dbQuery.insertPost, values, (err, log) => {
-				if(err) return next(err);
-				else {
-					res.send({result: true, post_num: log.insertId})
-				}
-			})
+			try{
+				const log = await connection.query(dbQuery.insertPost, values)
+				console.log(log)
+				res.send({result: true, post_num: log.insertId})
+			} catch(err) {
+				next(err)
+			}
 		}
 	}
 }
