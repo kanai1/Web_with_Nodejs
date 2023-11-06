@@ -1,5 +1,5 @@
 import './App.css';
-import {Main, Login, Register, Post, Mypage} from './components';
+import {Main, Login, Register, Post, Mypage, Board} from './components';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { useState, useEffect } from 'react'; 
 
@@ -27,7 +27,7 @@ function App() {
       <Router>
         <Routes>
           <Route path="/" element={<Main/>}></Route>
-          <Route path="/main" element={<Main/>}></Route>
+          <Route path="/board" element={<Board/>}></Route>
           <Route path="/login" element={<Login/>}></Route>
           <Route path="/register" element={<Register/>}></Route>
           <Route path="/post/:idx" element={<Post/>}></Route>

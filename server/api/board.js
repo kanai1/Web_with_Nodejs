@@ -5,7 +5,7 @@ let board = {
 		try{
 			const [rows] = await connection.execute(dbQuery.getBoard)
 			console.log(rows)
-			res.send(rows)
+			res.send({boardname: "Test", posts: rows})
 			next('route')
 		} catch (err) {
 			next(err)

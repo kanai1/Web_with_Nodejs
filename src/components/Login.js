@@ -44,9 +44,9 @@ function Login() {
       window.location.href='http://localhost:8888/api/auth/google/login'
     }
 
-    const onClickKaKaoOauth = (props) => {
-      window.location.href='http://localhost:8888/api/auth/kakao/login'
-    }
+    // const onClickKaKaoOauth = (props) => {
+    //   window.location.href='http://localhost:8888/api/auth/kakao/login'
+    // }
 
     const onClickRegister = (props) => {
       window.location.href = '/register';
@@ -80,7 +80,7 @@ function Login() {
           </form>
           <button onClick={onClickRegister}>회원가입</button>
           <button onClick={onClickGoogleOauth}>구글로그인</button>
-          <button onClick={onClickKaKaoOauth}>카카오로그인</button>
+          {/* <button onClick={onClickKaKaoOauth}>카카오로그인</button> */}
         </div>
     )
 }
