@@ -2,34 +2,33 @@ const connection = require('../lib/DB');
 const dbQuery = require('../lib/DB-query')
 const jwt_utils = require('./jwt_utils');
 
-function idDoubleCheck(id) {
-	var values = [id];
+async function idDoubleCheck(id) {
 	var result = true;
-
-	connection.query(dbQuery.getUseridCount, values, (error, rows) => {
-		if(error) throw error;
+	const [rows] = await connection.execute(dbQuery.getUseridCount, [id])
+	console.log("rows: ", rows)
+	try{
 		if(rows[0]['COUNT(*)'] == 0) result = true;
 		else result = false;
-	})
+	} catch(e) {
+		throw e;
+	}
 
 	return result;
 }
 
 let Login = {
 
-	login: function (req, res, next) {
+	login: async function (req, res, next) {
 		const sendData = {isLogin: ""};
 
-		var id = req.body.id;
-		var password = req.body.password;
+		const id = req.body.id;
+		const password = req.body.password;
 
-		var values = [id, password];
+		const [rows] = await connection.execute(dbQuery.loginCheck, [id, password])
 
-		connection.query(dbQuery.loginCheck, values, (error, rows) => {
-			if (error) throw error;
-			console.log('User info is: ', rows);
-			if(rows.length > 0)
-			{
+		try{
+			console.log('User info is: ', rows)
+			if(rows.length > 0) {
 				var token = jwt_utils.genarateAccessToken(rows[0]['id'], rows[0]['name']);
 				sendData.isLogin = true;
 				sendData.token = token;
@@ -37,31 +36,30 @@ let Login = {
 				console.log(sendData);
 				return next()
 			}
-			else
-			{
+			else {
 				sendData.isLogin = false;
 				res.send(sendData)
 				console.log(sendData);
 				return next()
 			}
-		});
+		}catch (e) {
+			throw e;
+		}
 	},
 
-	register: function(req, res) {
-		var id = req.body.id;
-		var password = req.body.password;
-		var username = req.body.username;
-		
-		var values = [id, password, username];
+	register: async function(req, res) {
+		const id = req.body.id;
+		const password = req.body.password;
+		const username = req.body.username;
 
-		if(idDoubleCheck(id)) {
-			connection.query(dbQuery.register, values, (error, log) => {
-				if(error) {
-					console.log(error);
-					throw error;
-				}
-				res.send({result: true});
-			});
+		if(await idDoubleCheck(id)) {
+			try{
+				await connection.execute(dbQuery.register, [id, password, username])
+				res.send({result:true})
+			} catch(e) {
+				console.log(e)
+				throw e
+			}
 		} else {
 			console.log('이미 존재하는 아이디입니다.');
 			res.send({error: 'idDoubleCheckError'});
