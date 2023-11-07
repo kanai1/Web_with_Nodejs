@@ -1,5 +1,6 @@
-const connection = require('../lib/DB');
+const connection = require('../lib/DB')
 const dbQuery = require('../lib/DB-query')
+
 let board = {
 	list: async function(req, res, next) {
 		try{
@@ -27,15 +28,15 @@ let board = {
 
 	post: async function(req, res, next) { /*not Tested: Have to make FrontPage*/
 		if(req.jwt.isLogin == false) {
-			res.send({result: false, message: "Login Require"});
+			res.send({result: false, message: "Login Require"})
 		}
 		else {
-			const title = req.body.title;
-			const body = req.body.body;
-			const writer_id = req.jwt.id;
-			const writer_name = req.jwt.name;
+			const title = req.body.title
+			const body = req.body.body
+			const writer_id = req.jwt.id
+			const writer_name = req.jwt.name
 			
-			const values = [title, body, writer_id, writer_name];
+			const values = [title, body, writer_id, writer_name]
 
 			try{
 				const log = await connection.query(dbQuery.insertPost, values)
@@ -48,4 +49,4 @@ let board = {
 	}
 }
 
-module.exports = board;
+module.exports = board

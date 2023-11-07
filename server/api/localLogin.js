@@ -3,54 +3,54 @@ const dbQuery = require('../lib/DB-query')
 const jwt_utils = require('./jwt_utils');
 
 async function idDoubleCheck(id) {
-	var result = true;
+	var result = true
 	const [rows] = await connection.execute(dbQuery.getUseridCount, [id])
 	console.log("rows: ", rows)
 	try{
-		if(rows[0]['COUNT(*)'] == 0) result = true;
-		else result = false;
+		if(rows[0]['COUNT(*)'] == 0) result = true
+		else result = false
 	} catch(e) {
-		throw e;
+		throw e
 	}
 
-	return result;
+	return result
 }
 
 let Login = {
 
 	login: async function (req, res, next) {
-		const sendData = {isLogin: ""};
+		const sendData = {isLogin: ""}
 
-		const id = req.body.id;
-		const password = req.body.password;
+		const id = req.body.id
+		const password = req.body.password
 
 		const [rows] = await connection.execute(dbQuery.loginCheck, [id, password])
 
 		try{
 			console.log('User info is: ', rows)
 			if(rows.length > 0) {
-				var token = jwt_utils.genarateAccessToken(rows[0]['id'], rows[0]['name']);
-				sendData.isLogin = true;
-				sendData.token = token;
-				res.send(sendData);
-				console.log(sendData);
+				var token = jwt_utils.genarateAccessToken(rows[0]['id'], rows[0]['name'])
+				sendData.isLogin = true
+				sendData.token = token
+				res.send(sendData)
+				console.log(sendData)
 				return next()
 			}
 			else {
-				sendData.isLogin = false;
+				sendData.isLogin = false
 				res.send(sendData)
-				console.log(sendData);
+				console.log(sendData)
 				return next()
 			}
 		}catch (e) {
-			throw e;
+			throw e
 		}
 	},
 
 	register: async function(req, res) {
-		const id = req.body.id;
-		const password = req.body.password;
-		const username = req.body.username;
+		const id = req.body.id
+		const password = req.body.password
+		const username = req.body.username
 
 		if(await idDoubleCheck(id)) {
 			try{
@@ -61,10 +61,10 @@ let Login = {
 				throw e
 			}
 		} else {
-			console.log('이미 존재하는 아이디입니다.');
-			res.send({error: 'idDoubleCheckError'});
+			console.log('이미 존재하는 아이디입니다.')
+			res.send({error: 'idDoubleCheckError'})
 		}
 	}
 }
 
-module.exports = Login;
+module.exports = Login
