@@ -1,6 +1,7 @@
 import './Post.css'
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import Comment from "../Comment"
 
 function Post(props) {
 	const navigate = useNavigate();
@@ -35,6 +36,7 @@ function Post(props) {
 				<h2>{board.title}</h2>
 				<p>{board.body}</p>
 			</div>
+			<Comment/>
 		</div>
 	);
 }
