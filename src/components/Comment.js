@@ -1,56 +1,39 @@
-import React, { Component } from 'react';
+import './Board.css'
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import {Link} from "react-router-dom";
+import {Link, useParams} from "react-router-dom";
 
-class Comment extends Component
-{
-	constructor(props) {
-		super(props)
-		this.state = {
-			boardname: props.boardname,
-			postnum: props.post_num,
-			data : [],
+
+function Boardnew() {
+    const {idx} = useParams()
+	const [list, setList] = useState([])
+	const time = new Date(Date.now()+32400000).toISOString().split('T')[0];
+ 
+	// 페이지 렌더링 후 가장 처음 호출되는 함수
+    useEffect(() => {
+        const getPost = async() => {
+			const data_json = await axios(`/api/board/comment/${idx}`, {
+			method : 'GET',
+			headers: new Headers()
+			})
+			setList(data_json.data.posts)
 		}
-		this.time = new Date(Date.now()+32400000).toISOString().split('T')[0];
-	}
-	
-	componentDidMount() {
-		this._getBoardData();
-	}
-
-	_getBoardData = async function() {
-		const data_json = await axios(`/api/board/comment/${state.post_num}`, {
-		method : 'GET',
-		headers: new Headers()
-		})
-
-		console.log(data_json)
-
-		this.setState({ data : data_json.data })
-	}
-
-	onClickPost = function(post_num){
-		window.location.href=`/post/${post_num}`;
-	}
-
-	render() {
-		const list = this.state.data;
-
-		return(
+		getPost()
+    },
+    [])
+ 
+    return(
+		<div>
 			<div>
-				<div>
-					{list ? list.map( (el) => {
-						return(
-						<div>
-							{/* 댓글 코드 */}
-						</div>
-						)
-					})
-					: null }
-				</div>
+				{list ? list.map( (el, idx) => {
+					return(
+					<div>댓글코드</div>
+					)
+				})
+				: null}
 			</div>
-		);
-	};
-}
-
-export default Comment;
+		</div>
+	);
+};
+ 
+export default Boardnew;
