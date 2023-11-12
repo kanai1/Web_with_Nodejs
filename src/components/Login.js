@@ -44,10 +44,6 @@ function Login() {
       window.location.href='http://localhost:8888/api/auth/google/login'
     }
 
-    // const onClickKaKaoOauth = (props) => {
-    //   window.location.href='http://localhost:8888/api/auth/kakao/login'
-    // }
-
     const onClickRegister = (props) => {
       window.location.href = '/register';
     }
