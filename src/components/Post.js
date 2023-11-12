@@ -1,7 +1,7 @@
 import './Post.css'
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import Comment from "../Comment"
+import Comment from "./Comment"
 
 function Post(props) {
 	const navigate = useNavigate();
@@ -29,10 +29,10 @@ function Post(props) {
 
 	return (
 		<div>
-			<div class="Header">
+			<div className="Header">
 				<button onClick={onClickBack}>뒤로가기</button>
 			</div>
-			<div class="Body">
+			<div className="Body">
 				<h2>{board.title}</h2>
 				<p>{board.body}</p>
 			</div>

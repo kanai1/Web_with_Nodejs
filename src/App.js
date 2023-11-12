@@ -27,7 +27,7 @@ function App() {
       <Router>
         <Routes>
           <Route path="/" element={<Main/>}></Route>
-          <Route path="/board" element={<Board/>}></Route>
+          <Route path="/board/:boardname" element={<Board/>}></Route>
           <Route path="/login" element={<Login/>}></Route>
           <Route path="/register" element={<Register/>}></Route>
           <Route path="/post/:idx" element={<Post/>}></Route>
