@@ -4,10 +4,9 @@ const dbQuery = require('../lib/DB-query')
 let board = {
 	list: async function(req, res, next) {
 		try{
-			const [rows] = await connection.execute(dbQuery.getBoard)
+			const [rows] = await connection.execute(dbQuery.getBoard, [req.params.boardname])
 			console.log(rows)
-			res.send({boardname: "Test", posts: rows})
-			next('route')
+			res.send({posts: rows})
 		} catch (err) {
 			next(err)
 		}
@@ -35,8 +34,9 @@ let board = {
 			const body = req.body.body
 			const writer_id = req.jwt.id
 			const writer_name = req.jwt.name
+			const boardname = req.body.boardname
 			
-			const values = [title, body, writer_id, writer_name]
+			const values = [title, body, writer_id, writer_name, boardname]
 
 			try{
 				const log = await connection.query(dbQuery.insertPost, values)
@@ -46,6 +46,10 @@ let board = {
 				next(err)
 			}
 		}
+	},
+
+	getComment: async function(req, res, next) {
+
 	}
 }
 
