@@ -19,7 +19,6 @@ function Post(props) {
 			setBoard(json);
 		})
 		.catch()
-		
 	}, 
 	[])
 
@@ -36,7 +35,7 @@ function Post(props) {
 				<h2>{board.title}</h2>
 				<p>{board.body}</p>
 			</div>
-			<Comment/>
+			{/* <Comment/> */}
 		</div>
 	);
 }

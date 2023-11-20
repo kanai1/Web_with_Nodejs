@@ -76,7 +76,6 @@ function Login() {
           </form>
           <button onClick={onClickRegister}>회원가입</button>
           <button onClick={onClickGoogleOauth}>구글로그인</button>
-          {/* <button onClick={onClickKaKaoOauth}>카카오로그인</button> */}
         </div>
     )
 }

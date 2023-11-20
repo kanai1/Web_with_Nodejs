@@ -1,16 +1,19 @@
 import './Board.css'
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import {Link, useParams} from "react-router-dom";
+import {Link, useParams, BrowserRouter as Router, Route, Routes} from "react-router-dom";
 
 
-function Board() {
+function Board(props) {
     const {boardname} = useParams()
 	const [list, setList] = useState([])
+	const [isLogin, setIsLogin] = useState(false)
 	const time = new Date(Date.now()+32400000).toISOString().split('T')[0];
  
 	// 페이지 렌더링 후 가장 처음 호출되는 함수
     useEffect(() => {
+		setIsLogin(props.isLogin)
+
         const getPost = async() => {
 			const data_json = await axios(`/api/board/list/${boardname}`, {
 			method : 'GET',
@@ -21,11 +24,19 @@ function Board() {
 		getPost()
     },
     [])
+
+	const onClickWrite = (props) => {
+		window.location.href += '/post'
+	}
  
     return(
 		<div>
 			<div>
 				<h3>{boardname}게시판</h3>
+				{ isLogin?
+					<button onClick={onClickWrite}>글쓰기</button>
+					:null
+				}
 			</div>
 			<div className="outers">
 				<table className="board_table">

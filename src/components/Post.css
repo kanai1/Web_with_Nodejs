@@ -1,6 +1,6 @@
 .Header{display: flex; justify-content: flex-end}
 .Body{
-	display: flex; align-items: center;
+	display: flex; align-items: center;flex-direction: column
 }
 .Body > h2 {
 	position: relative;
@@ -10,4 +10,22 @@
 .Body > p {
 	position: relative;
 	top: 50px;
+}
+
+.Body > span {
+	position: relative;
+	top: 10px;
+}
+
+.Body > textarea {
+	position: relative;
+}
+
+.Body > input {
+	position: relative;
+	top: 10px;
+}
+
+.Body > button {
+	position: relative;
 }

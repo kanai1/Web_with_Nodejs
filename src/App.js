@@ -1,5 +1,5 @@
 import './App.css';
-import {Main, Login, Register, Post, Mypage, Board} from './components';
+import {Main, Login, Register, Post, Mypage, Board, Write} from './components';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { useState, useEffect } from 'react'; 
 
@@ -18,7 +18,6 @@ function App() {
 		})
         .catch()
     },
-    // 페이지 호출 후 처음 한번만 호출될 수 있도록 [] 추가
     [])
 
   return (
@@ -27,7 +26,8 @@ function App() {
       <Router>
         <Routes>
           <Route path="/" element={<Main/>}></Route>
-          <Route path="/board/:boardname" element={<Board/>}></Route>
+          <Route path="/board/:boardname" element={<Board isLogin={isLogin}/>}></Route>
+					<Route path="/board/:boardname/post" element={<Write/>}/>
           <Route path="/login" element={<Login/>}></Route>
           <Route path="/register" element={<Register/>}></Route>
           <Route path="/post/:idx" element={<Post/>}></Route>
