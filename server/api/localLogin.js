@@ -2,21 +2,31 @@ const connection = require('../lib/DB');
 const dbQuery = require('../lib/DB-query')
 const jwt_utils = require('./jwt_utils');
 
-async function idDoubleCheck(id) {
-	var result = true
-	const [rows] = await connection.execute(dbQuery.getUseridCount, [id])
-	console.log("rows: ", rows)
-	try{
-		if(rows[0]['COUNT(*)'] == 0) result = true
-		else result = false
-	} catch(e) {
-		throw e
-	}
+const specialCharacters = "a-zA-Z0-9";
+const specialCharactersRegex = new RegExp(`^[${specialCharacters}]+$`);
 
-	return result
-}
+let Login = {	
+	async idDoubleCheck(id) {
+		var result = true
+		const [rows] = await connection.execute(dbQuery.getUseridCount, [id])
+		console.log("rows: ", rows)
+		try{
+			if(rows[0]['COUNT(*)'] == 0) result = true
+			else result = false
+		} catch(e) {
+			throw e
+		}
+	
+		return result
+	},
+	
+	idSpecialCharactersCheck(id) {
+		return specialCharactersRegex.test(id);
+	},
 
-let Login = {
+	async idCheck(id) {
+		return this.idSpacialCharactersCheck(id) && await this.idDoubleCheck(id)
+	},
 
 	login: async function (req, res, next) {
 		const sendData = {isLogin: ""}
@@ -52,7 +62,8 @@ let Login = {
 		const password = req.body.password
 		const username = req.body.username
 
-		if(await idDoubleCheck(id)) {
+
+		if(await this.idCheck(id)) {
 			try{
 				await connection.execute(dbQuery.register, [id, password, username])
 				res.send({result:true})
